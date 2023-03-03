@@ -1,8 +1,9 @@
 import java.io.File;
 import java.util.Scanner;
+import java.io.FileNotFoundException;
 
 public class HashingPoetry {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws FileNotFoundException {
 //        WritePoetry poem = new WritePoetry();
 
 //        System.out.println("--- Sam ---");
@@ -19,6 +20,10 @@ public class HashingPoetry {
 
 //        testHashTable("zebra.txt");
         testUpdatedHashTable();
+        System.out.println("Zebra text: \n");
+        WritePoetry.readAndBuild("zebra.txt");
+        System.out.println("\n");
+        WritePoetry.readAndBuild("green.txt");
     }
 
 //    private static void testHashTable(String filename) {
