@@ -19,9 +19,9 @@ public class HashingPoetry {
 //        System.out.println();
 
 //        testHashTable("zebra.txt");
-        testUpdatedHashTable();
-        System.out.println("Zebra text: \n");
-        WritePoetry.readAndBuild("zebra.txt");
+//        testUpdatedHashTable();
+//        System.out.println("Zebra text: \n");
+//        WritePoetry.readAndBuild("zebra.txt");
         System.out.println("\n");
         WritePoetry.readAndBuild("green.txt");
     }
