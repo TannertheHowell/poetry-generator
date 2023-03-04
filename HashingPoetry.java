@@ -19,36 +19,13 @@ public class HashingPoetry {
 //        System.out.println();
 
 //        testHashTable("zebra.txt");
-//        testUpdatedHashTable();
+        testUpdatedHashTable();
 //        System.out.println("Zebra text: \n");
 //        WritePoetry.readAndBuild("zebra.txt");
-        System.out.println("\n");
-        WritePoetry.readAndBuild("green.txt");
+//        System.out.println("\n");
+        HashTable <String, WordFreqInfo> table = WritePoetry.readAndBuild("green.txt");
+        System.out.println(table.toString(99));
     }
-
-//    private static void testHashTable(String filename) {
-//        File file = new File(filename);
-//        HashTable<String> allWords = new HashTable<>();
-//
-//        try (Scanner input = new Scanner(file)) {
-//            //
-//            // Start by reading all the words into memory.
-//            while (input.hasNext()) {
-//                String word = cleanWord(input.next());
-//                if (word.length() > 0) {
-//                    allWords.insert(word);
-//                }
-//            }
-//        }
-//        catch (java.io.IOException ex) {
-//            System.out.println("An error occurred trying to read the dictionary: " + ex);
-//        }
-//
-//        System.out.printf("HashTable Info:\n");
-//        System.out.printf("\tSize: %d\n", allWords.size());
-//        System.out.println(allWords.toString(allWords.size()));
-//    }
-
     /**
      * When you have completed updating the HashTable class, this code will compile and
      * produce the output as shown in the assignment description.

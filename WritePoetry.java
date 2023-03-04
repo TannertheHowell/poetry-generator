@@ -12,7 +12,7 @@ public class WritePoetry {
         return null;
     }
 
-    public static void readAndBuild(String file)  throws FileNotFoundException{
+    public static HashTable<String, WordFreqInfo> readAndBuild(String file)  throws FileNotFoundException{
         // Making the new hashtable
         HashTable<String, WordFreqInfo> table = new HashTable<>();
         ArrayList<String[]> words = new ArrayList<String[]>();
@@ -21,7 +21,9 @@ public class WritePoetry {
         while (scanner.hasNextLine()) {
             String line = scanner.nextLine();
             String[] lineWords = line.split("[ ]");
-            words.add(lineWords);
+            if(!lineWords[0].equals("")){
+                words.add(lineWords);
+            }
         }
 
         for(int lineIndex = 0; lineIndex < words.size(); lineIndex++){
@@ -42,8 +44,12 @@ public class WritePoetry {
                         if ( i < currentLine.length - 1){
                             table = addWordToTable(table, Character.toString(lastChar), currentLine[i + 1]);
                         } else{
-                            String followWord = words.get(lineIndex + 1)[0];
-                            table = addWordToTable(table, Character.toString(lastChar), followWord);
+                            if (lineIndex < words.size() - 1){
+                                String followWord = words.get(lineIndex + 1)[0];
+                                table = addWordToTable(table, Character.toString(lastChar), followWord);
+                            } else{
+                                table = addWordToTable(table, Character.toString(lastChar));
+                            }
                         }
 
                     } else{
@@ -51,32 +57,44 @@ public class WritePoetry {
                         if ( i < currentLine.length - 1){
                             table = addWordToTable(table, word, currentLine[i + 1]);
                         } else{
-                            String followWord = words.get(lineIndex + 1)[0];
-                            table = addWordToTable(table, word, followWord);
+                            if (lineIndex < words.size() - 1){
+                                String followWord = words.get(lineIndex + 1)[0];
+                                table = addWordToTable(table, word, followWord);
+                            } else{
+                                table = addWordToTable(table, word);
+                            }
                         }
                     }
                 }
             }
         }
+        return table;
     }
 
     private static HashTable<String, WordFreqInfo> addWordToTable (HashTable<String, WordFreqInfo> table, String wordToAdd, String wordFollow){
+        char lastChar = wordFollow.charAt(wordFollow.length() - 1);
+
+        // Checking to see if there is punctuation at the end of the word
+        if (lastChar == '.' || lastChar == ',' || lastChar == '!' || lastChar == '?') {
+            wordFollow = wordFollow.substring(0, wordFollow.length() - 1);
+        }
+
         if (table.contains(wordToAdd)){
-            table.find(wordToAdd).updateFollows(wordFollow);
+            table.find(wordToAdd).updateFollows(wordFollow.toLowerCase());
         } else{
             WordFreqInfo WFI = new WordFreqInfo(wordToAdd, 0);
             table.insert(wordToAdd, WFI);
-            table.find(wordToAdd).updateFollows(wordFollow);
+            table.find(wordToAdd).updateFollows(wordFollow.toLowerCase());
         }
         return table;
     }
     private static HashTable<String, WordFreqInfo> addWordToTable (HashTable<String, WordFreqInfo> table, String wordToAdd){
         if (table.contains(wordToAdd)){
-
+            table.find(wordToAdd).updateFollows("");
         } else{
             WordFreqInfo WFI = new WordFreqInfo(wordToAdd, 1);
             table.insert(wordToAdd, WFI);
-
+            table.find(wordToAdd).updateFollows("");
         }
         return table;
     }
