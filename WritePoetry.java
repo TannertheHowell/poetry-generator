@@ -2,19 +2,43 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
 import java.util.ArrayList;
+import java.util.Random;
 
 public class WritePoetry {
+    public HashTable<String, WordFreqInfo> table = new HashTable<>();
+
     // IntelliJ suggested the FileNotFoundException to catch a bad file
-    public String writePoem(String file, String startWord, int length, boolean printHashtable) {ArrayList<String> cars = new ArrayList<String>();
+    public String writePoem(String file, String startWord, int length, boolean printHashtable) throws FileNotFoundException {
+        readAndBuild(file);
+        WordFreqInfo WFI = table.find(startWord);
+        Random rnd = new Random();
+        StringBuilder poemWords = new StringBuilder();
+
         if (printHashtable){
-            // print the hashtable
+            System.out.println(table.toString(table.size()));
         }
-        return null;
+        for (int i = 0; i < length; i++ ){
+            int count = rnd.nextInt((WFI.getOccurCount()));
+            String followWord = WFI.getFollowWord(count);
+
+            if (followWord.equals(".")|| followWord.equals("?") || followWord.equals("!") || followWord.equals(",")){
+                poemWords.deleteCharAt(poemWords.length() - 1);
+                poemWords.append(followWord + "\n");
+            } else {
+                poemWords.append(followWord + " ");
+            }
+            WFI = table.find(followWord);
+        }
+        char lastCharacter = poemWords.charAt(poemWords.length() - 1);
+        if (lastCharacter == ' ' ){
+            poemWords.deleteCharAt(poemWords.length() - 1);
+            poemWords.append(".");
+        }
+        return poemWords.toString();
     }
 
-    public static HashTable<String, WordFreqInfo> readAndBuild(String file)  throws FileNotFoundException{
+    public void readAndBuild(String file)  throws FileNotFoundException{
         // Making the new hashtable
-        HashTable<String, WordFreqInfo> table = new HashTable<>();
         ArrayList<String[]> words = new ArrayList<String[]>();
 
         Scanner scanner = new Scanner(new File(file));
@@ -40,43 +64,40 @@ public class WritePoetry {
                     // Checking to see if there is punctuation at the end of the word
                     if (lastChar == '.' || lastChar == ',' || lastChar == '!' || lastChar == '?') {
                         String wordWithoutPunc = word.substring(0, word.length() - 1);
-                        table = addWordToTable(table, wordWithoutPunc, Character.toString(lastChar));
+                        addWordToTable(wordWithoutPunc, Character.toString(lastChar));
                         if ( i < currentLine.length - 1){
-                            table = addWordToTable(table, Character.toString(lastChar), currentLine[i + 1]);
+                            addWordToTable(Character.toString(lastChar), currentLine[i + 1]);
                         } else{
                             if (lineIndex < words.size() - 1){
                                 String followWord = words.get(lineIndex + 1)[0];
-                                table = addWordToTable(table, Character.toString(lastChar), followWord);
-                            } else{
-                                table = addWordToTable(table, Character.toString(lastChar));
+                                addWordToTable(Character.toString(lastChar), followWord);
                             }
                         }
 
                     } else{
                         // Words without punctuation are just added to the table
                         if ( i < currentLine.length - 1){
-                            table = addWordToTable(table, word, currentLine[i + 1]);
+                            addWordToTable(word, currentLine[i + 1]);
                         } else{
                             if (lineIndex < words.size() - 1){
                                 String followWord = words.get(lineIndex + 1)[0];
-                                table = addWordToTable(table, word, followWord);
-                            } else{
-                                table = addWordToTable(table, word);
+                                addWordToTable(word, followWord);
                             }
                         }
                     }
                 }
             }
         }
-        return table;
     }
 
-    private static HashTable<String, WordFreqInfo> addWordToTable (HashTable<String, WordFreqInfo> table, String wordToAdd, String wordFollow){
-        char lastChar = wordFollow.charAt(wordFollow.length() - 1);
+    private void addWordToTable (String wordToAdd, String wordFollow){
+        if (wordFollow.length() > 1) {
+            char lastChar = wordFollow.charAt(wordFollow.length() - 1);
 
-        // Checking to see if there is punctuation at the end of the word
-        if (lastChar == '.' || lastChar == ',' || lastChar == '!' || lastChar == '?') {
-            wordFollow = wordFollow.substring(0, wordFollow.length() - 1);
+            // Checking to see if there is punctuation at the end of the word
+            if (lastChar == '.' || lastChar == ',' || lastChar == '!' || lastChar == '?') {
+                wordFollow = wordFollow.substring(0, wordFollow.length() - 1);
+            }
         }
 
         if (table.contains(wordToAdd)){
@@ -86,17 +107,5 @@ public class WritePoetry {
             table.insert(wordToAdd, WFI);
             table.find(wordToAdd).updateFollows(wordFollow.toLowerCase());
         }
-        return table;
     }
-    private static HashTable<String, WordFreqInfo> addWordToTable (HashTable<String, WordFreqInfo> table, String wordToAdd){
-        if (table.contains(wordToAdd)){
-            table.find(wordToAdd).updateFollows("");
-        } else{
-            WordFreqInfo WFI = new WordFreqInfo(wordToAdd, 1);
-            table.insert(wordToAdd, WFI);
-            table.find(wordToAdd).updateFollows("");
-        }
-        return table;
-    }
-
 }

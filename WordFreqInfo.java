@@ -36,6 +36,16 @@ public class WordFreqInfo {
         }
     }
 
+    public String getFollowWord(int count){
+        ArrayList<String> allWordsFromFL = new ArrayList<String>();
+        for (Frequency freq : followList){
+            for (int i = 0; i < freq.followCount; i++){
+                allWordsFromFL.add(freq.follow);
+            }
+        }
+        return allWordsFromFL.get(count);
+    }
+
     public int getOccurCount() {
         return this.occurCount;
     }

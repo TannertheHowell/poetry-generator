@@ -4,27 +4,27 @@ import java.io.FileNotFoundException;
 
 public class HashingPoetry {
     public static void main(String[] args) throws FileNotFoundException {
-//        WritePoetry poem = new WritePoetry();
+        WritePoetry poem = new WritePoetry();
 
-//        System.out.println("--- Sam ---");
-//        System.out.println(poem.writePoem("green.txt", "sam", 30, false));
-//        System.out.println();
+        System.out.println("--- Sam ---");
+        System.out.println(poem.writePoem("green.txt", "sam", 30, false));
+        System.out.println();
 
-//        System.out.println("--- Lester ---");
-//        System.out.println(poem.writePoem("lester.txt", "lester", 30, false));
-//        System.out.println();
+        System.out.println("--- Lester ---");
+        System.out.println(poem.writePoem("lester.txt", "lester", 30, false));
+        System.out.println();
 
-//        System.out.println("--- How Many ---");
-//        System.out.println(poem.writePoem("how-many.txt", "how", 50, false));
-//        System.out.println();
+        System.out.println("--- How Many ---");
+        System.out.println(poem.writePoem("how-many.txt", "how", 50, false));
+        System.out.println();
 
 //        testHashTable("zebra.txt");
-        testUpdatedHashTable();
+//        testUpdatedHashTable();
 //        System.out.println("Zebra text: \n");
 //        WritePoetry.readAndBuild("zebra.txt");
 //        System.out.println("\n");
-        HashTable <String, WordFreqInfo> table = WritePoetry.readAndBuild("green.txt");
-        System.out.println(table.toString(99));
+//        HashTable <String, WordFreqInfo> table = WritePoetry.readAndBuild();
+//        System.out.println(poem.table.toString(poem.table.size()));
     }
     /**
      * When you have completed updating the HashTable class, this code will compile and
